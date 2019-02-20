@@ -4,12 +4,17 @@ from rest_framework.generics import (
     RetrieveAPIView,
     RetrieveUpdateAPIView,
     DestroyAPIView,
+    CreateAPIView,
 )
+
 from .serializers import (
     RestaurantListSerializer,
     RestaurantDetailSerializer,
     RestaurantCreateUpdateSerializer,
 )
+
+from django.http import JsonResponse
+
 
 class RestaurantListView(ListAPIView):
     queryset = Restaurant.objects.all()
@@ -24,7 +29,10 @@ class RestaurantDetailView(RetrieveAPIView):
 
 
 # Complete Me
-class RestaurantCreateView():
+class RestaurantCreateView(CreateAPIView):
+    serializer_class = RestaurantCreateUpdateSerializer 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class RestaurantUpdateView(RetrieveUpdateAPIView):
